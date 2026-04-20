@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Sant Jordi 💌</title>
+<title>Sant Jordi Lau 💌</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 
@@ -31,6 +31,14 @@ button {
 img {
     max-width:300px;
     margin:20px;
+}
+
+/* CARTA LADO A LADO */
+.row {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
 }
 
 /* pétalos */
@@ -82,9 +90,6 @@ img {
 <!-- CONTENIDO -->
 <div id="screen4" class="hidden">
     <h2>¿Por dónde quieres empezar?</h2>
-    <p style="font-size:18px; color:#6d6875;">
-        Puedes elegir cualquier opción… pero tendrás que descubrirlas todas
-    </p>
 
     <img src="carta01.jpeg" onclick="openCarta()">
     <img src="bolsa_cerrada01.jpeg" onclick="openBolsa()">
@@ -108,15 +113,12 @@ img {
 <script>
 
 let seen = { carta:false, bolsa:false, libro:false };
+let lastFrames = [];
 
 function checkDate() {
     let input = document.getElementById("dateInput").value;
 
-    if (!input) {
-        document.getElementById("msg").innerText =
-        "Por favor, introduce una fecha 😉";
-        return;
-    }
+    if (!input) return;
 
     let selected = new Date(input);
     let limit = new Date("2026-04-23");
@@ -131,7 +133,7 @@ function checkDate() {
 
         setTimeout(()=>{
             document.getElementById("continueBtn").classList.remove("hidden");
-        },5000);
+        },4000);
     }
 }
 
@@ -151,6 +153,7 @@ function goToPackage(){
     document.getElementById("screen3").classList.remove("hidden");
 }
 
+/* SACUDIR */
 function shake(){
     let img = document.getElementById("packageImg");
 
@@ -163,7 +166,7 @@ function shake(){
     "Efectivamente, hay algo dentro.";
 }
 
-/* STOP MOTION */
+/* STOP MOTION (rápido) */
 function openCarefully(){
     let frames = [
         "paquete.jpeg",
@@ -175,7 +178,7 @@ function openCarefully(){
         "paquete_abriendo06.jpeg",
         "caja_cerrada.jpeg"
     ];
-    playSequence(frames, showBoxOpening);
+    playSequence(frames, showBoxOpening, 200);
 }
 
 function destroy(){
@@ -190,7 +193,7 @@ function destroy(){
         "paquete_romper08.jpeg",
         "caja_cerrada.jpeg"
     ];
-    playSequence(frames, showBoxOpening);
+    playSequence(frames, showBoxOpening, 200);
 }
 
 function showBoxOpening(){
@@ -198,10 +201,10 @@ function showBoxOpening(){
         "caja_abierta01.jpeg",
         "caja_abierta02.jpeg"
     ];
-    playSequence(frames, showContent);
+    playSequence(frames, showContent, 400);
 }
 
-function playSequence(frames, callback){
+function playSequence(frames, callback, speed){
     let i = 0;
     let img = document.getElementById("packageImg");
 
@@ -211,9 +214,9 @@ function playSequence(frames, callback){
 
         if(i >= frames.length){
             clearInterval(interval);
-            setTimeout(callback, 800);
+            setTimeout(callback, 600);
         }
-    },400);
+    }, speed);
 }
 
 function showContent(){
@@ -221,36 +224,62 @@ function showContent(){
     document.getElementById("screen4").classList.remove("hidden");
 }
 
+/* LIMPIAR INTERACCIÓN */
+function resetInteraction(){
+    document.getElementById("interactionContent").innerHTML = "";
+}
+
+/* CARTA (lenta) */
 function openCarta(){
     seen.carta = true;
-    playInteraction(["carta01.jpeg","carta02.jpeg","carta03.jpeg","carta04.jpeg"]);
+    resetInteraction();
+
+    let frames = ["carta01.jpeg","carta02.jpeg","carta03.jpeg","carta04.jpeg"];
+    playInteraction(frames, 600);
 }
 
+/* BOLSA (lenta) */
 function openBolsa(){
     seen.bolsa = true;
-    playInteraction(["bolsa_cerrada01.jpeg","bolsa_cerrada02.jpeg","iman.jpeg"]);
+    resetInteraction();
+
+    let frames = ["bolsa_cerrada01.jpeg","bolsa_cerrada02.jpeg","iman.jpeg"];
+    playInteraction(frames, 600);
 }
 
+/* LIBRO (rápido) */
 function openLibro(){
     seen.libro = true;
-    playInteraction(["caja_interrogante01.jpeg","libro.jpeg"]);
+    resetInteraction();
+
+    let frames = ["caja_interrogante01.jpeg","libro.jpeg"];
+    playInteraction(frames, 300);
 }
 
-function playInteraction(frames){
+/* INTERACCIÓN */
+function playInteraction(frames, speed){
     let i = 0;
 
     document.getElementById("screen4").classList.add("hidden");
     document.getElementById("interaction").classList.remove("hidden");
 
     let interval = setInterval(()=>{
-        document.getElementById("interactionContent").innerHTML =
-        "<img src='"+frames[i]+"'>";
-        i++;
+        let img = frames[i];
+
+        if(i === 2 && frames.length === 4){
+            document.getElementById("interactionContent").innerHTML =
+            "<div class='row'><img src='"+frames[2]+"'><img src='"+frames[3]+"'></div>";
+            i = frames.length;
+        } else {
+            document.getElementById("interactionContent").innerHTML =
+            "<img src='"+img+"'>";
+            i++;
+        }
 
         if(i >= frames.length){
             clearInterval(interval);
         }
-    },500);
+    }, speed);
 }
 
 function nextItem(){
