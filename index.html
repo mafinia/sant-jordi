@@ -71,7 +71,7 @@ img {
 <!-- PANTALLA 3 -->
 <div id="screen3" class="hidden">
     <h2>📦 Tu paquete</h2>
-    <img src="paquete.jpg" id="packageImg">
+    <img src="paquete.jpeg" id="packageImg">
     <br>
     <button onclick="shake()">Sacudir</button>
     <button onclick="openCarefully()">Abrir con cuidado</button>
@@ -86,9 +86,9 @@ img {
         Puedes elegir cualquier opción… pero tendrás que descubrirlas todas
     </p>
 
-    <img src="carta01.jpg" onclick="openCarta()">
-    <img src="bolsa_cerrada01.jpg" onclick="openBolsa()">
-    <img src="caja_interrogante01.jpg" onclick="openLibro()">
+    <img src="carta01.jpeg" onclick="openCarta()">
+    <img src="bolsa_cerrada01.jpeg" onclick="openBolsa()">
+    <img src="caja_interrogante01.jpeg" onclick="openLibro()">
 </div>
 
 <!-- INTERACCIÓN -->
@@ -166,37 +166,37 @@ function shake(){
 /* STOP MOTION */
 function openCarefully(){
     let frames = [
-        "paquete.jpg",
-        "paquete_abriendo01.jpg",
-        "paquete_abriendo02.jpg",
-        "paquete_abriendo03.jpg",
-        "paquete_abriendo04.jpg",
-        "paquete_abriendo05.jpg",
-        "paquete_abriendo06.jpg",
-        "caja_cerrada.jpg"
+        "paquete.jpeg",
+        "paquete_abriendo01.jpeg",
+        "paquete_abriendo02.jpeg",
+        "paquete_abriendo03.jpeg",
+        "paquete_abriendo04.jpeg",
+        "paquete_abriendo05.jpeg",
+        "paquete_abriendo06.jpeg",
+        "caja_cerrada.jpeg"
     ];
     playSequence(frames, showBoxOpening);
 }
 
 function destroy(){
     let frames = [
-        "paquete_romper01.jpg",
-        "paquete_romper02.jpg",
-        "paquete_romper03.jpg",
-        "paquete_romper04.jpg",
-        "paquete_romper05.jpg",
-        "paquete_romper06.jpg",
-        "paquete_romper07.jpg",
-        "paquete_romper08.jpg",
-        "caja_cerrada.jpg"
+        "paquete_romper01.jpeg",
+        "paquete_romper02.jpeg",
+        "paquete_romper03.jpeg",
+        "paquete_romper04.jpeg",
+        "paquete_romper05.jpeg",
+        "paquete_romper06.jpeg",
+        "paquete_romper07.jpeg",
+        "paquete_romper08.jpeg",
+        "caja_cerrada.jpeg"
     ];
     playSequence(frames, showBoxOpening);
 }
 
 function showBoxOpening(){
     let frames = [
-        "caja_abierta01.jpg",
-        "caja_abierta02.jpg"
+        "caja_abierta01.jpeg",
+        "caja_abierta02.jpeg"
     ];
     playSequence(frames, showContent);
 }
@@ -223,17 +223,17 @@ function showContent(){
 
 function openCarta(){
     seen.carta = true;
-    playInteraction(["carta01.jpg","carta02.jpg","carta03.jpg","carta04.jpg"]);
+    playInteraction(["carta01.jpeg","carta02.jpeg","carta03.jpeg","carta04.jpeg"]);
 }
 
 function openBolsa(){
     seen.bolsa = true;
-    playInteraction(["bolsa_cerrada01.jpg","bolsa_cerrada02.jpg","iman.jpg"]);
+    playInteraction(["bolsa_cerrada01.jpeg","bolsa_cerrada02.jpeg","iman.jpeg"]);
 }
 
 function openLibro(){
     seen.libro = true;
-    playInteraction(["caja_interrogante01.jpg","libro.jpg"]);
+    playInteraction(["caja_interrogante01.jpeg","libro.jpeg"]);
 }
 
 function playInteraction(frames){
