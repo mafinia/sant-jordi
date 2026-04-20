@@ -71,22 +71,8 @@ img {
 <!-- PANTALLA 3 -->
 <div id="screen3" class="hidden">
     <h2>📦 Tu paquete</h2>
-    <div id="packageArea">
-        <img src="paquete.jpg" id="packageImg">
-    </div>
+    <img src="paquete.jpg" id="packageImg">
     <br>
-    <button onclick="function shake(){
-    let img = document.getElementById("packageImg");
-
-    // pequeño efecto de sacudida
-    img.style.transform = "translateX(5px)";
-    setTimeout(()=> img.style.transform = "translateX(-5px)", 100);
-    setTimeout(()=> img.style.transform = "translateX(5px)", 200);
-    setTimeout(()=> img.style.transform = "translateX(0px)", 300);
-
-    document.getElementById("packageMsg").innerText =
-    "Efectivamente, hay algo dentro.";
-}">Sacudir</button>
     <button onclick="shake()">Sacudir</button>
     <button onclick="openCarefully()">Abrir con cuidado</button>
     <button onclick="destroy()">Romper envoltorio</button>
@@ -96,7 +82,9 @@ img {
 <!-- CONTENIDO -->
 <div id="screen4" class="hidden">
     <h2>¿Por dónde quieres empezar?</h2>
-<p style="font-size:18px; color:#6d6875;">Puedes elegir cualquier opción… pero tendrás que descubrirlas todas</p>
+    <p style="font-size:18px; color:#6d6875;">
+        Puedes elegir cualquier opción… pero tendrás que descubrirlas todas
+    </p>
 
     <img src="carta01.jpg" onclick="openCarta()">
     <img src="bolsa_cerrada01.jpg" onclick="openBolsa()">
@@ -123,6 +111,13 @@ let seen = { carta:false, bolsa:false, libro:false };
 
 function checkDate() {
     let input = document.getElementById("dateInput").value;
+
+    if (!input) {
+        document.getElementById("msg").innerText =
+        "Por favor, introduce una fecha 😉";
+        return;
+    }
+
     let selected = new Date(input);
     let limit = new Date("2026-04-23");
 
@@ -156,10 +151,9 @@ function goToPackage(){
     document.getElementById("screen3").classList.remove("hidden");
 }
 
-function function shake(){
+function shake(){
     let img = document.getElementById("packageImg");
 
-    // pequeño efecto de sacudida
     img.style.transform = "translateX(5px)";
     setTimeout(()=> img.style.transform = "translateX(-5px)", 100);
     setTimeout(()=> img.style.transform = "translateX(5px)", 200);
@@ -167,12 +161,9 @@ function function shake(){
 
     document.getElementById("packageMsg").innerText =
     "Efectivamente, hay algo dentro.";
-}{
-    document.getElementById("packageMsg").innerText =
-    "Efectivamente, hay algo dentro.";
 }
 
-/* STOP MOTION ABRIR CON CUIDADO */
+/* STOP MOTION */
 function openCarefully(){
     let frames = [
         "paquete.jpg",
@@ -184,11 +175,9 @@ function openCarefully(){
         "paquete_abriendo06.jpg",
         "caja_cerrada.jpg"
     ];
-
     playSequence(frames, showBoxOpening);
 }
 
-/* STOP MOTION ROMPER */
 function destroy(){
     let frames = [
         "paquete_romper01.jpg",
@@ -201,21 +190,17 @@ function destroy(){
         "paquete_romper08.jpg",
         "caja_cerrada.jpg"
     ];
-
     playSequence(frames, showBoxOpening);
 }
 
-/* ABRIR CAJA */
 function showBoxOpening(){
     let frames = [
         "caja_abierta01.jpg",
         "caja_abierta02.jpg"
     ];
-
     playSequence(frames, showContent);
 }
 
-/* FUNCIÓN GENERAL STOP MOTION */
 function playSequence(frames, callback){
     let i = 0;
     let img = document.getElementById("packageImg");
@@ -236,31 +221,21 @@ function showContent(){
     document.getElementById("screen4").classList.remove("hidden");
 }
 
-/* CARTA */
 function openCarta(){
     seen.carta = true;
-
-    let frames = ["carta01.jpg","carta02.jpg","carta03.jpg","carta04.jpg"];
-    playInteraction(frames);
+    playInteraction(["carta01.jpg","carta02.jpg","carta03.jpg","carta04.jpg"]);
 }
 
-/* BOLSA */
 function openBolsa(){
     seen.bolsa = true;
-
-    let frames = ["bolsa_cerrada01.jpg","bolsa_cerrada02.jpg","iman.jpg"];
-    playInteraction(frames);
+    playInteraction(["bolsa_cerrada01.jpg","bolsa_cerrada02.jpg","iman.jpg"]);
 }
 
-/* LIBRO */
 function openLibro(){
     seen.libro = true;
-
-    let frames = ["caja_interrogante01.jpg","libro.jpg"];
-    playInteraction(frames);
+    playInteraction(["caja_interrogante01.jpg","libro.jpg"]);
 }
 
-/* INTERACCIONES */
 function playInteraction(frames){
     let i = 0;
 
