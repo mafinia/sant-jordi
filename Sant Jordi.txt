@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sant Jordi 💌</title>
+
+<style>
+body {
+    margin:0;
+    font-family: 'Georgia', serif;
+    background:#fff8f8;
+    text-align:center;
+    overflow:hidden;
+}
+
+.hidden { display:none; }
+
+button {
+    padding:12px 20px;
+    margin:10px;
+    font-size:16px;
+    border:none;
+    border-radius:8px;
+    background:#e63946;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover { background:#c9182b; }
+
+img {
+    max-width:300px;
+    margin:20px;
+}
+
+/* pétalos */
+.petal {
+    position:fixed;
+    top:-10px;
+    width:10px;
+    height:10px;
+    background:pink;
+    border-radius:50%;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
+}
+
+/* nube pelea */
+.fight {
+    font-size:60px;
+    animation: pop 3s;
+}
+
+@keyframes pop {
+    0% {transform:scale(0);}
+    50% {transform:scale(1.5);}
+    100% {transform:scale(0);}
+}
+
+/* flotando */
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px);}
+    50% { transform: translateY(-10px);}
+    100% { transform: translateY(0px);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA 1 -->
+<div id="screen1">
+    <h2>Introduce la fecha</h2>
+    <input type="date" id="dateInput">
+    <br><br>
+    <button onclick="checkDate()">Entrar</button>
+    <p id="msg"></p>
+</div>
+
+<!-- PANTALLA 2 -->
+<div id="screen2" class="hidden">
+    <h2>Feliç Sant Jordi! 🌹</h2>
+    <button id="continueBtn" class="hidden" onclick="goToPackage()">Continuar</button>
+</div>
+
+<!-- PANTALLA 3 -->
+<div id="screen3" class="hidden">
+    <h2>📦 Tu paquete</h2>
+    <img src="paquete.jpg">
+    <br>
+    <button onclick="shake()">Sacudir</button>
+    <button onclick="openCarefully()">Abrir con cuidado</button>
+    <button onclick="destroy()">Romper envoltorio</button>
+    <p id="packageMsg"></p>
+</div>
+
+<!-- PANTALLA 4 -->
+<div id="screen4" class="hidden">
+    <h2>✨ Contenido</h2>
+
+    <img src="carta.jpg" onclick="openCarta()" class="float">
+    <img src="bolsa.jpg" onclick="openBolsa()" class="float">
+    <img src="libro_oculto.jpg" id="libro" onclick="openLibro()" class="float">
+
+</div>
+
+<!-- PANTALLA INTERACCIONES -->
+<div id="interaction" class="hidden">
+    <div id="interactionContent"></div>
+    <button onclick="nextItem()">Siguiente</button>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="hidden">
+    <h2>Una tiene que ser original cuando los costes de envío están por las nubes</h2>
+    <h3>#FuckBrexit</h3>
+</div>
+
+<script>
+
+let seen = {
+    carta:false,
+    bolsa:false,
+    libro:false
+};
+
+function checkDate() {
+    let input = document.getElementById("dateInput").value;
+    let selected = new Date(input);
+    let limit = new Date("2026-04-23");
+
+    if (selected < limit) {
+        document.getElementById("msg").innerText =
+        "Acceso restringido, vuelva a intentarlo más adelante.";
+    } else {
+        document.getElementById("screen1").classList.add("hidden");
+        document.getElementById("screen2").classList.remove("hidden");
+        startPetals();
+
+        setTimeout(()=>{
+            document.getElementById("continueBtn").classList.remove("hidden");
+        },5000);
+    }
+}
+
+function startPetals(){
+    setInterval(()=>{
+        let petal = document.createElement("div");
+        petal.classList.add("petal");
+        petal.style.left = Math.random()*100+"vw";
+        petal.style.animationDuration = (Math.random()*3+2)+"s";
+        document.body.appendChild(petal);
+
+        setTimeout(()=>petal.remove(),5000);
+    },300);
+}
+
+function goToPackage(){
+    document.getElementById("screen2").classList.add("hidden");
+    document.getElementById("screen3").classList.remove("hidden");
+}
+
+function shake(){
+    document.getElementById("packageMsg").innerText =
+    "Efectivamente, hay algo dentro.";
+}
+
+function openCarefully(){
+    document.getElementById("packageMsg").innerText =
+    "Abriendo con cuidado...";
+    setTimeout(showContent,2000);
+}
+
+function destroy(){
+    document.getElementById("packageMsg").innerHTML =
+    "<div class='fight'>💥</div>";
+    setTimeout(showContent,3000);
+}
+
+function showContent(){
+    document.getElementById("screen3").classList.add("hidden");
+    document.getElementById("screen4").classList.remove("hidden");
+}
+
+function openCarta(){
+    seen.carta = true;
+    showInteraction("<img src='carta_abierta.jpg'><p>💌 Carta</p>");
+}
+
+function openBolsa(){
+    seen.bolsa = true;
+    showInteraction("<img src='iman.jpg'><p>🎁 Imán</p>");
+}
+
+function openLibro(){
+    seen.libro = true;
+    showInteraction("<img src='libro_real.jpg'><p>📖 Libro</p>");
+}
+
+function showInteraction(content){
+    document.getElementById("screen4").classList.add("hidden");
+    document.getElementById("interaction").classList.remove("hidden");
+    document.getElementById("interactionContent").innerHTML = content;
+}
+
+function nextItem(){
+    document.getElementById("interaction").classList.add("hidden");
+
+    if(seen.carta && seen.bolsa && seen.libro){
+        document.getElementById("final").classList.remove("hidden");
+    } else {
+        document.getElementById("screen4").classList.remove("hidden");
+    }
+}
+
+</script>
+
+</body>
+</html>
