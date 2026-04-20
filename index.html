@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Sant Jordi Lau 💌</title>
+<title>Sant Jordi 💌</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 
@@ -33,14 +33,6 @@ img {
     margin:20px;
 }
 
-/* CARTA LADO A LADO */
-.row {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:20px;
-}
-
 /* pétalos */
 .petal {
     position:fixed;
@@ -59,7 +51,7 @@ img {
 </style>
 </head>
 
-<body>
+<body onclick="startMusicOnce()">
 
 <!-- PANTALLA 1 -->
 <div id="screen1">
@@ -110,11 +102,23 @@ img {
     <p>#FuckBrexit</p>
 </div>
 
+<audio id="music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 
 let seen = { carta:false, bolsa:false, libro:false };
-let lastFrames = [];
+let musicStarted = false;
 
+function startMusicOnce(){
+    if(!musicStarted){
+        document.getElementById("music").play();
+        musicStarted = true;
+    }
+}
+
+/* FECHA */
 function checkDate() {
     let input = document.getElementById("dateInput").value;
 
@@ -166,7 +170,7 @@ function shake(){
     "Efectivamente, hay algo dentro.";
 }
 
-/* STOP MOTION (rápido) */
+/* STOP MOTION */
 function openCarefully(){
     let frames = [
         "paquete.jpeg",
@@ -196,12 +200,20 @@ function destroy(){
     playSequence(frames, showBoxOpening, 200);
 }
 
+/* CAJA ABIERTA (AQUÍ EL CAMBIO IMPORTANTE) */
 function showBoxOpening(){
-    let frames = [
-        "caja_abierta01.jpeg",
-        "caja_abierta02.jpeg"
-    ];
-    playSequence(frames, showContent, 400);
+    let img = document.getElementById("packageImg");
+
+    img.src = "caja_cerrada.jpeg";
+
+    // 🔥 SE MANTIENE 8 SEGUNDOS
+    setTimeout(()=>{
+        let frames = [
+            "caja_abierta01.jpeg",
+            "caja_abierta02.jpeg"
+        ];
+        playSequence(frames, showContent, 400);
+    }, 8000);
 }
 
 function playSequence(frames, callback, speed){
@@ -214,7 +226,7 @@ function playSequence(frames, callback, speed){
 
         if(i >= frames.length){
             clearInterval(interval);
-            setTimeout(callback, 600);
+            setTimeout(callback, 800);
         }
     }, speed);
 }
@@ -224,36 +236,22 @@ function showContent(){
     document.getElementById("screen4").classList.remove("hidden");
 }
 
-/* LIMPIAR INTERACCIÓN */
-function resetInteraction(){
-    document.getElementById("interactionContent").innerHTML = "";
-}
-
-/* CARTA (lenta) */
+/* CARTA */
 function openCarta(){
     seen.carta = true;
-    resetInteraction();
-
-    let frames = ["carta01.jpeg","carta02.jpeg","carta03.jpeg","carta04.jpeg"];
-    playInteraction(frames, 600);
+    playInteraction(["carta01.jpeg","carta02.jpeg","carta03.jpeg","carta04.jpeg"], 600);
 }
 
-/* BOLSA (lenta) */
+/* BOLSA */
 function openBolsa(){
     seen.bolsa = true;
-    resetInteraction();
-
-    let frames = ["bolsa_cerrada01.jpeg","bolsa_cerrada02.jpeg","iman.jpeg"];
-    playInteraction(frames, 600);
+    playInteraction(["bolsa_cerrada01.jpeg","bolsa_cerrada02.jpeg","iman.jpeg"], 600);
 }
 
-/* LIBRO (rápido) */
+/* LIBRO */
 function openLibro(){
     seen.libro = true;
-    resetInteraction();
-
-    let frames = ["caja_interrogante01.jpeg","libro.jpeg"];
-    playInteraction(frames, 300);
+    playInteraction(["caja_interrogante01.jpeg","libro.jpeg"], 300);
 }
 
 /* INTERACCIÓN */
@@ -264,17 +262,9 @@ function playInteraction(frames, speed){
     document.getElementById("interaction").classList.remove("hidden");
 
     let interval = setInterval(()=>{
-        let img = frames[i];
-
-        if(i === 2 && frames.length === 4){
-            document.getElementById("interactionContent").innerHTML =
-            "<div class='row'><img src='"+frames[2]+"'><img src='"+frames[3]+"'></div>";
-            i = frames.length;
-        } else {
-            document.getElementById("interactionContent").innerHTML =
-            "<img src='"+img+"'>";
-            i++;
-        }
+        document.getElementById("interactionContent").innerHTML =
+        "<img src='"+frames[i]+"'>";
+        i++;
 
         if(i >= frames.length){
             clearInterval(interval);
@@ -293,10 +283,6 @@ function nextItem(){
 }
 
 </script>
-
-<audio autoplay loop>
-    <source src="musica.mp3" type="audio/mpeg">
-</audio>
 
 </body>
 </html>
