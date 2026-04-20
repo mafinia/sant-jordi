@@ -27,10 +27,10 @@ button {
     cursor:pointer;
 }
 
-/* IMÁGENES GRANDES */
+/* 🔧 IMÁGENES AJUSTADAS (CLAVE DEL CAMBIO) */
 img {
-    max-width: 85vw;
-    max-height: 80vh;
+    max-width: 60vw;
+    max-height: 60vh;
     object-fit: contain;
     margin: 10px;
 }
@@ -44,7 +44,6 @@ img {
     flex-wrap:wrap;
 }
 
-/* oculto */
 .hidden { display:none; }
 
 /* pétalos */
@@ -136,7 +135,8 @@ function startMusicOnce(){
 /* FECHA */
 function checkDate() {
     let input = document.getElementById("dateInput").value;
-    if(!input) return;
+
+    if (!input) return;
 
     let selected = new Date(input);
     let limit = new Date("2026-04-23");
@@ -213,7 +213,7 @@ function destroy(){
     ], showBoxOpening, 200);
 }
 
-/* CAJA ABIERTA (8 SEGUNDOS FIJOS) */
+/* CAJA ABIERTA */
 function showBoxOpening(){
     let img = document.getElementById("packageImg");
     img.src = "caja_cerrada.jpeg";
@@ -277,7 +277,7 @@ function openLibro(){
     ], 300, false);
 }
 
-/* INTERACCIÓN (FIX CARTA LADO A LADO) */
+/* INTERACCIÓN */
 function playInteraction(frames, speed, isCarta){
     let i = 0;
 
@@ -309,7 +309,6 @@ function playInteraction(frames, speed, isCarta){
     }, speed);
 }
 
-/* NEXT */
 function nextItem(){
     document.getElementById("interaction").classList.add("hidden");
 
