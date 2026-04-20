@@ -15,8 +15,7 @@ body {
     overflow:hidden;
 }
 
-.hidden { display:none; }
-
+/* BOTONES */
 button {
     padding:12px 20px;
     margin:10px;
@@ -28,10 +27,25 @@ button {
     cursor:pointer;
 }
 
+/* IMÁGENES GRANDES */
 img {
-    max-width:300px;
-    margin:20px;
+    max-width: 85vw;
+    max-height: 80vh;
+    object-fit: contain;
+    margin: 10px;
 }
+
+/* CARTA LADO A LADO */
+.row {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+/* oculto */
+.hidden { display:none; }
 
 /* pétalos */
 .petal {
@@ -111,6 +125,7 @@ img {
 let seen = { carta:false, bolsa:false, libro:false };
 let musicStarted = false;
 
+/* MÚSICA */
 function startMusicOnce(){
     if(!musicStarted){
         document.getElementById("music").play();
@@ -121,8 +136,7 @@ function startMusicOnce(){
 /* FECHA */
 function checkDate() {
     let input = document.getElementById("dateInput").value;
-
-    if (!input) return;
+    if(!input) return;
 
     let selected = new Date(input);
     let limit = new Date("2026-04-23");
@@ -141,6 +155,7 @@ function checkDate() {
     }
 }
 
+/* PÉTALOS */
 function startPetals(){
     setInterval(()=>{
         let petal = document.createElement("div");
@@ -152,12 +167,12 @@ function startPetals(){
     },300);
 }
 
+/* PAQUETE */
 function goToPackage(){
     document.getElementById("screen2").classList.add("hidden");
     document.getElementById("screen3").classList.remove("hidden");
 }
 
-/* SACUDIR */
 function shake(){
     let img = document.getElementById("packageImg");
 
@@ -172,7 +187,7 @@ function shake(){
 
 /* STOP MOTION */
 function openCarefully(){
-    let frames = [
+    playSequence([
         "paquete.jpeg",
         "paquete_abriendo01.jpeg",
         "paquete_abriendo02.jpeg",
@@ -181,12 +196,11 @@ function openCarefully(){
         "paquete_abriendo05.jpeg",
         "paquete_abriendo06.jpeg",
         "caja_cerrada.jpeg"
-    ];
-    playSequence(frames, showBoxOpening, 200);
+    ], showBoxOpening, 200);
 }
 
 function destroy(){
-    let frames = [
+    playSequence([
         "paquete_romper01.jpeg",
         "paquete_romper02.jpeg",
         "paquete_romper03.jpeg",
@@ -196,26 +210,23 @@ function destroy(){
         "paquete_romper07.jpeg",
         "paquete_romper08.jpeg",
         "caja_cerrada.jpeg"
-    ];
-    playSequence(frames, showBoxOpening, 200);
+    ], showBoxOpening, 200);
 }
 
-/* CAJA ABIERTA (AQUÍ EL CAMBIO IMPORTANTE) */
+/* CAJA ABIERTA (8 SEGUNDOS FIJOS) */
 function showBoxOpening(){
     let img = document.getElementById("packageImg");
-
     img.src = "caja_cerrada.jpeg";
 
-    // 🔥 SE MANTIENE 8 SEGUNDOS
     setTimeout(()=>{
-        let frames = [
+        playSequence([
             "caja_abierta01.jpeg",
             "caja_abierta02.jpeg"
-        ];
-        playSequence(frames, showContent, 400);
+        ], showContent, 400);
     }, 8000);
 }
 
+/* SECUENCIAS */
 function playSequence(frames, callback, speed){
     let i = 0;
     let img = document.getElementById("packageImg");
@@ -226,7 +237,7 @@ function playSequence(frames, callback, speed){
 
         if(i >= frames.length){
             clearInterval(interval);
-            setTimeout(callback, 800);
+            setTimeout(callback, 600);
         }
     }, speed);
 }
@@ -239,39 +250,66 @@ function showContent(){
 /* CARTA */
 function openCarta(){
     seen.carta = true;
-    playInteraction(["carta01.jpeg","carta02.jpeg","carta03.jpeg","carta04.jpeg"], 600);
+    playInteraction([
+        "carta01.jpeg",
+        "carta02.jpeg",
+        "carta03.jpeg",
+        "carta04.jpeg"
+    ], 600, true);
 }
 
 /* BOLSA */
 function openBolsa(){
     seen.bolsa = true;
-    playInteraction(["bolsa_cerrada01.jpeg","bolsa_cerrada02.jpeg","iman.jpeg"], 600);
+    playInteraction([
+        "bolsa_cerrada01.jpeg",
+        "bolsa_cerrada02.jpeg",
+        "iman.jpeg"
+    ], 600, false);
 }
 
 /* LIBRO */
 function openLibro(){
     seen.libro = true;
-    playInteraction(["caja_interrogante01.jpeg","libro.jpeg"], 300);
+    playInteraction([
+        "caja_interrogante01.jpeg",
+        "libro.jpeg"
+    ], 300, false);
 }
 
-/* INTERACCIÓN */
-function playInteraction(frames, speed){
+/* INTERACCIÓN (FIX CARTA LADO A LADO) */
+function playInteraction(frames, speed, isCarta){
     let i = 0;
 
     document.getElementById("screen4").classList.add("hidden");
     document.getElementById("interaction").classList.remove("hidden");
 
     let interval = setInterval(()=>{
+
+        if(isCarta && i === 2){
+            document.getElementById("interactionContent").innerHTML =
+            "<div class='row'>"+
+                "<img src='"+frames[2]+"'>"+
+                "<img src='"+frames[3]+"'>"+
+            "</div>";
+
+            clearInterval(interval);
+            return;
+        }
+
         document.getElementById("interactionContent").innerHTML =
         "<img src='"+frames[i]+"'>";
+
         i++;
 
         if(i >= frames.length){
             clearInterval(interval);
         }
+
     }, speed);
 }
 
+/* NEXT */
 function nextItem(){
     document.getElementById("interaction").classList.add("hidden");
 
